@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+// Discrete math, Programming language, Data structure 3과목의 성적을 입력받아 평균을 구하고, 평균에 따른 학점을 출력하는 프로그램을 작성
+
 int main(void)
 {
     float math, ProgrammingLanguage, DataStructrue;
