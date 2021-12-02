@@ -1,4 +1,6 @@
 #include <stdio.h>
+
+// 사용자로부터 n값을 입력 받아, n보다 작은 소수 (prime number)를 모두 출력
 int main()
 {
     int i, j, n;

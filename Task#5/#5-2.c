@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+// 사용자로부터 n값을 입력받아, n의 소인수 (prime factors)를 모두 출력
 int main()
 {
     int i, j, n, isPrime;
