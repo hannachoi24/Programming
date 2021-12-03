@@ -46,6 +46,7 @@ int main(void)
                 if (guess == key)
                 {
                     printf("You got the extreme number! the key was %d", key);
+                    break;
                 }
             }
         }
@@ -55,11 +56,11 @@ int main(void)
             printf("Lucky! the key is close to %d ", guess);
             printf("\n");
         }
-    }
 
-    if (cnt > 10)
-    {
-        printf("Computer won! the key was %d", key);
+        if (cnt >= 10)
+        {
+            printf("Computer won! the key was %d", key);
+        }
     }
 
     return 0;
