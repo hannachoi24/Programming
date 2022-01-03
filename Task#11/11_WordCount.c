@@ -9,216 +9,59 @@ HINT: fopen, fscanf 등으로 내용을 읽으세요.
 새로운 단어를 읽으면 문자열 배열 및 등장 횟수 배열에 값을 추가하고, 
 이미 존재하는 단어를 읽으면 (strncmp 등 활용) 등장 횟수 배열의 값만 증가 시키세요. */
 
-#define MAX 1000
-
-char SIGN[] = " .,!?:\"\t\r\n";
-
-typedef struct List
+int main()
 {
-    char *word;
-    int count;
-    struct List *next;
-} List;
+    FILE *fp;
 
-List head = {
-    0,
-};
-List *tail = &head;
-
-int word_count = 0; // # of words
-List **W = 0;
-
-//////////////////////////////////////////////////////////////////////////
-void list2array(List *head, List **W)
-{
-    List *temp = head->next;
-    int i = 0;
-    while (temp)
-    {
-        W[i++] = temp;
-        temp = temp->next;
-    }
-}
-
-void printW(List **W, int n)
-{
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        printf("%20s : %d\n", W[i]->word, W[i]->count);
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////
-List *FindToken(const char *token)
-{
-    List *temp = head.next;
-    while (temp)
-    {
-        if (strcmp(temp->word, token) == 0)
-            return temp;
-        temp = temp->next;
-    }
-    return 0;
-}
-
-//////////////////////////////////////////////////////////////////////////
-void InsertList(char *token)
-{
-    List *temp = FindToken(token);
-    if (temp) // Found,
-    {
-        temp->count++;
-    }
-    else
-    {
-        int len = strlen(token) + 1;
-        temp = (List *)malloc(sizeof(List));
-        temp->word = (char *)malloc(sizeof(char) * len);
-        strncpy(temp->word, token, len);
-        temp->count = 1;
-        temp->next = 0;
-        tail->next = temp;
-        tail = temp;
-
-        word_count++;
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////
-void print_token()
-{
-    List *temp = head.next;
-    FILE *fw = fopen("daul\\list.txt", "wt");
-
-    while (temp)
-    {
-        fprintf(fw, "%s : %d\n", temp->word, temp->count);
-        temp = temp->next;
-    }
-    fclose(fw);
-}
-
-//////////////////////////////////////////////////////////////////////////
-void free_token()
-{
-    List *temp;
-    while (temp = head.next)
-    {
-        if (temp->word)
-            free(temp->word);
-
-        head.next = temp->next;
-        free(temp);
-    }
-    tail = &head;
-}
-
-//////////////////////////////////////////////////////////////////////////
-typedef List *T; // 정렬할 자료형 T
-
-void swap(T *a, T *b)
-{
-    T t = *a;
-    *a = *b;
-    *b = t;
-}
-
-int comp(const void *pa, const void *pb)
-{
-    const T a = *(const T *)pa;
-    const T b = *(const T *)pb;
-
-    return strcmp(a->word, b->word);
-}
-
-int partition(T *A, int left, int right, int pivot)
-{
-    int i, index;
-    T value = A[pivot];
-
-    swap(&A[pivot], &A[right]);
-    index = left;
-    for (i = left; i < right; i++)
-    {
-        if (comp(&A[i], &value) < 0)
-        {
-            swap(&A[i], &A[index]);
-            ++index;
-        }
-    }
-    swap(&A[index], &A[right]);
-    return index;
-}
-
-void quickpart(T *A, int left, int right)
-{
-    int pivot;
-    int index;
-
-    if (right > left)
-    {
-        pivot = (right + left) / 2;
-        index = partition(A, left, right, pivot);
-        quickpart(A, left, index - 1);
-        quickpart(A, index + 1, right);
-    }
-}
-
-void quicksort(T *A, int n)
-{
-    quickpart(A, 0, n - 1);
-}
-
-//////////////////////////////////////////////////////////////////////////
-int main(void)
-{
-    char *str;   // File total Length,
-    char *token; // token,
-    long length; // 파일전체길이
-    int i = 0;
-
-    FILE *fp = fopen("list.txt", "rt");
-
-    // Open not file,
+    fp = fopen("C:\\Users\\choihanna\\Desktop\\C\\Task#11\\list.txt", "r");
     if (fp == NULL)
     {
-        puts("File open fail!");
-        return -1;
+        printf("실패\n");
+        return 1;
     }
 
-    fseek(fp, 0, SEEK_END);
-    length = ftell(fp);
-    rewind(fp);
-
-    str = (char *)malloc(sizeof(char) * length + 1);
-    memset(str, 0, sizeof(char) * length + 1);
-
-    puts("*** Data File Reading.. ***");
-
-    fread(str, 1, length, fp);
+    char cha;
+    int count[6] = {
+        0,
+    };
+    char getdata[13][9] = {{
+        0,
+    }};
+    int i = 0, j = 0;
+    while (1)
+    {
+        fscanf(fp, "%c", &cha);
+        if (cha == '\n')
+        {
+            i++;
+            j = 0;
+        }
+        else
+        {
+            getdata[i][j] = cha;
+            j++;
+        }
+        if (feof(fp))
+        {
+            break;
+        }
+    }
+    for (int i = 0; i < 6; i++)
+    {
+        count[i] += 1;
+        for (int j = i + 1; j < 13; j++)
+        {
+            if ((strncmp(getdata[i], getdata[j], 9)) == 0)
+            {
+                count[i] += 1;
+            }
+        }
+    }
     fclose(fp);
 
-    // 단어 수집
-    token = strtok(str, SIGN);
-    while (token != NULL)
+    for (int i = 0; i < 6; i++)
     {
-        InsertList(token);
-        // 두번째토큰, 호출부터는 첫 번째 인수자리에 NULL 기입
-        token = strtok(NULL, SIGN);
+        printf("%s: ", getdata[i]);
+        printf("%d\n", count[i]);
     }
-
-    // 단어의 포인터 배열
-    W = (List **)malloc(sizeof(List *) * word_count);
-    list2array(&head, W); // 리스트에서 배열로
-
-    quicksort(W, word_count); // 정렬
-                              //     qsort(W,word_count,sizeof(T),comp); // 정렬
-
-    printW(W, word_count); // 정렬 출력
-
-    free(W);
-    free_token();
-
-    return 0;
 }
