@@ -42,12 +42,12 @@
 
 ## 입력예:
 
-Put your guess: 100
-The key is lower than 100
-Put your guess: 10
-The key is higher than 10
-Put your guess: 25
-Lucky! the key is close to 25
-The key is higher than 25
-Put your guess: 30
+Put your guess: 100  
+The key is lower than 100  
+Put your guess: 10  
+The key is higher than 10  
+Put your guess: 25  
+Lucky! the key is close to 25  
+The key is higher than 25  
+Put your guess: 30  
 Player won! the key was 30
